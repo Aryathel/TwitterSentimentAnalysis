@@ -19,5 +19,5 @@ TWITTER_CONSUMER_SECRET={your Twitter application's consumer key}
 TWITTER_ACCESS_TOKEN={your Twitter application's access token}
 TWITTER_ACCESS_SECRET={your Twitter application's access secret}
 ```
-1. Edit the [main](main.py#39) file, on line 39, and change the `keyword` argument to your search keyword, and change the `num` argument to the maximum number of tweets you want to search.
+1. Edit the [main](main.py#L39) file, on line 39, and change the `keyword` argument to your search keyword, and change the `num` argument to the maximum number of tweets you want to search.
 1. Run `pipenv run python main.py` to start the program.
