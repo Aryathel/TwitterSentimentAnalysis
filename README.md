@@ -7,6 +7,7 @@ This is a work in progress project that I am starting to be able to let a user l
 - Make sure you have the `pipenv` library installed.
 - Have a [Twitter Developer](https://developer.twitter.com/) account created, and have an [application](https://developer.twitter.com/en/portal/dashboard) ready for this project.
 
+### Steps
 1. Clone this repo.
 1. Open a command prompt/terminal in the folder where the repo has been cloned, and run `pipenv install`.
 1. Create a folder called `nltk_data` anywhere.
