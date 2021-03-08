@@ -104,6 +104,21 @@ class Sentiment:
         """ :class:`int`: The count of negatively scored inputs. """
         return len(self.negative_list)
 
+    @property
+    def positive_percent(self):
+        """ :class:`float`: The percentage of positive entries vs total. """
+        return self.percentage(self.positive_count, len(self.inputs))
+
+    @property
+    def neutral_percent(self):
+        """ :class:`float`: The percentage of neutral entries vs total. """
+        return self.percentage(self.neutral_count, len(self.inputs))
+
+    @property
+    def negative_percent(self):
+        """ :class:`float`: The percentage of negative entries vs total. """
+        return self.percentage(self.negative_count, len(self.inputs))
+
     @staticmethod
     def percentage(part, whole):
         """ :class:`float`: The calculated percentage based on inputs.
@@ -153,9 +168,9 @@ class Sentiment:
         Prints the results of determining the sentiment scores of inputs.
         """
         num_inputs = len(self.inputs)
-        positive = round(self.percentage(self.positive_count, num_inputs), 1)
-        neutral = round(self.percentage(self.neutral_count, num_inputs), 1)
-        negative = round(self.percentage(self.negative_count, num_inputs), 1)
+        positive = round(self.positive_percent, 1)
+        neutral = round(self.neutral_percent, 1)
+        negative = round(self.negative_percent, 1)
 
         print(f"Positive: {self.positive_count} ({positive}%)")
         print(f"Neutral: {self.neutral_count} ({neutral}%)")

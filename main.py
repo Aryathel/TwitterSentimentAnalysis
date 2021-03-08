@@ -7,6 +7,7 @@ import re
 import string
 
 # Library imports
+from flask import Flask
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
@@ -22,28 +23,67 @@ from sklearn.feature_extraction.text import CountVectorizer
 from utils.twitter import Twitter
 from utils.sentiment import Sentiment
 
-if __name__ == "__main__":
-    # Make sure that the sentiment has all of the data downloaded that it needs, and is up to date
-    nltk.download('vader_lexicon')
+from pages.index import Index
+from pages.login import Login
 
-    # Get the Twitter API connection info from environment variables.
-    con_key = os.getenv("TWITTER_CONSUMER_KEY")
-    con_sec = os.getenv("TWITTER_CONSUMER_SECRET")
-    acc_tok = os.getenv("TWITTER_ACCESS_TOKEN")
-    acc_sec = os.getenv("TWITTER_ACCESS_SECRET")
+# Make sure that the sentiment analyzer has all of the data downloaded that it needs, and is up to date
+nltk.download('vader_lexicon')
 
-    # Create the twitter handler instance
-    tw_client = Twitter(con_key, con_sec, acc_tok, acc_sec)
+# Get the Twitter API connection info from environment variables.
+con_key = os.getenv("TWITTER_CONSUMER_KEY")
+con_sec = os.getenv("TWITTER_CONSUMER_SECRET")
+acc_tok = os.getenv("TWITTER_ACCESS_TOKEN")
+acc_sec = os.getenv("TWITTER_ACCESS_SECRET")
 
-    # Get a list of tweets with a given keyword
-    print("Getting tweets...")
-    tweets = tw_client.get_tweets(keyword = "destinythegame", num = 1000)
-    tweets = [tweet.text for tweet in tweets]
+# Creating the Flask app.
+app = Flask(__name__)
 
-    # Check the sentiments of said tweets
-    print("Processing Tweet sentiments...")
-    Sentiment(tweets)
+# Create a secret key for the flask sessions.
+app.secret_key = os.getenv("APP_SECRET_KEY").encode("utf-8")
 
-    # Saving the tweets to a file just to poke around
-    with open('./tweets.txt', 'wb+') as file:
-        file.write("\n\n".join(tweets).encode("utf-8"))
+app.config.update(
+    TWITTER_CLIENT_ID = con_key,
+    TWITTER_CLIENT_SECRET = con_sec,
+    TWITTER_REQUEST_TOKEN_URL = 'https://api.twitter.com/oauth/request_token',
+    TWITTER_ACCESS_TOKEN_URL = 'https://api.twitter.com/oauth/access_token',
+    TWITTER_AUTHORIZE_URL = 'https://api.twitter.com/oauth/authenticate'
+)
+
+# Create the twitter handler instance
+tw_client = Twitter(con_key, con_sec, acc_tok, acc_sec)
+
+# Creating page instances
+index = Index(tw_client)
+login = Login(app)
+
+# Registering page blueprints.
+app.register_blueprint(index.blueprint, url_prefix='/')
+app.register_blueprint(login.blueprint, url_prefix='/')
+
+""" DISABLING THIS FOR NOW WHILE FLASK FRAMEWORK IS GETTING SET UP
+# Get a list of tweets with a given keyword
+print("Getting tweets...")
+tweets = tw_client.get_tweets(keyword = "destinythegame", num = 100)
+tweets.drop_duplicates(inplace = True)
+tweets = [tweet.text for tweet in tweets]
+
+# Check the sentiments of said tweets
+print("Processing Tweet sentiments...")
+sentiment = Sentiment(tweets)
+
+# Create and display a Pie Chart of positivity results.
+labels = [
+    f"Positive [{sentiment.positive_percent}%]",
+    f"Neutral [{sentiment.neutral_percent}%]",
+    f"Negative [ {sentiment.negative_percent}%]"
+]
+
+sizes = [sentiment.positive_percent, sentiment.neutral_percent, sentiment.negative_percent]
+colors = ['yellowgreen', 'blue', 'red']
+patches, texts = plt.pie(sizes, colors = colors, startangle=90)
+plt.style.use('default')
+plt.legend(labels)
+plt.title("Sentiment Analysis Result")
+plt.axis("equal")
+plt.show()
+"""

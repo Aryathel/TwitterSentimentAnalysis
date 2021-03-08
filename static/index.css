@@ -1,0 +1,13 @@
+a {
+  text-decoration: none;
+  border: none;
+  outline: none;
+  color: inherit;
+  -webkit-tap-highlight-color: white;
+}
+
+#container .prepended {}
+
+#container .notprepended {
+  border-radius: 0.25rem;
+}

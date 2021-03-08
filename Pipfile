@@ -13,6 +13,8 @@ matplotlib = "*"
 pandas = "*"
 nltk = "*"
 pycountry = "*"
+flask = "*"
+flask-oauth = "*"
 
 [requires]
 python_version = "3.8"

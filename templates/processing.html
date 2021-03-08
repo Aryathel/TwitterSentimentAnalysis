@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Twitter Sentiment Analyzer</title>
+
+    <link rel="stylesheet" href="/static/processing.css">
+
+    <script>
+      window.onload = (event) => {
+        var elem = document.getElementById('form').submit();
+      }
+    </script>
+  </head>
+  <body>
+    <div class="loader"></div>
+    <form id="form" action="/sentiment" method="POST" hidden>
+      <input type="text" name="search_type" value="{{search_type}}">
+      <input type="number" name="result_number" value="{{result_number}}">
+      <input type="text" name="search_string" value="{{search_string}}">
+    </form>
+  </body>
+</html>
